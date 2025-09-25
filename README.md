@@ -1,0 +1,1 @@
+Design and implement a secure Access Control System for a small organization. The core objective is to demonstrate sound security engineering practices: strong authentication, proper authorization (RBAC), protected data handling, and extensibility for future security controls.
