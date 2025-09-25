@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% set title = "2FA Backup Codes" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h4><i class="bi bi-check-circle"></i> Two-Factor Authentication Enabled</h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-success">
+                    <i class="bi bi-shield-check"></i>
+                    <strong>Success!</strong> Two-factor authentication has been enabled for your account.
+                </div>
+                
+                <div class="backup-codes">
+                    <h5><i class="bi bi-key"></i> Backup Codes</h5>
+                    <p class="text-muted">
+                        Save these backup codes in a secure location. Each code can only be used once to access your account 
+                        if you lose access to your authenticator app.
+                    </p>
+                    
+                    <div class="row">
+                        {% for code in backup_codes %}
+                        <div class="col-md-6 col-sm-6 mb-2">
+                            <span class="backup-code">{{ code }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="mt-3">
+                        <button class="btn btn-outline-primary" onclick="printCodes()">
+                            <i class="bi bi-printer"></i> Print Codes
+                        </button>
+                        <button class="btn btn-outline-secondary" onclick="downloadCodes()">
+                            <i class="bi bi-download"></i> Download as Text
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="alert alert-warning mt-4">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    <strong>Important:</strong>
+                    <ul class="mb-0 mt-2">
+                        <li>Store these codes in a secure location</li>
+                        <li>Each code can only be used once</li>
+                        <li>Don't share these codes with anyone</li>
+                        <li>You can generate new backup codes from your security settings</li>
+                    </ul>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <a href="{{ url_for('profile.security') }}" class="btn btn-primary">
+                        <i class="bi bi-arrow-left"></i> Back to Security Settings
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function printCodes() {
+        const printWindow = window.open('', '_blank');
+        const codes = {{ backup_codes|tojson }};
+        
+        printWindow.document.write(`
+            <html>
+                <head>
+                    <title>2FA Backup Codes - Access Control System</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; }
+                        .header { text-align: center; margin-bottom: 30px; }
+                        .codes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+                        .code { font-family: monospace; font-size: 16px; font-weight: bold; 
+                                border: 1px solid #ddd; padding: 10px; text-align: center; }
+                        .warning { margin-top: 30px; padding: 15px; background: #fff3cd; 
+                                  border: 1px solid #ffeaa7; border-radius: 5px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h2>Two-Factor Authentication Backup Codes</h2>
+                        <p>Account: {{ current_user.username }} ({{ current_user.email }})</p>
+                        <p>Generated: ${new Date().toLocaleString()}</p>
+                    </div>
+                    <div class="codes">
+                        ${codes.map(code => '<div class="code">' + code + '</div>').join('')}
+                    </div>
+                    <div class="warning">
+                        <strong>Important:</strong>
+                        <ul>
+                            <li>Store these codes in a secure location</li>
+                            <li>Each code can only be used once</li>
+                            <li>Don't share these codes with anyone</li>
+                        </ul>
+                    </div>
+                </body>
+            </html>
+        `);
+        
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+    }
+    
+    function downloadCodes() {
+        const codes = {{ backup_codes|tojson }};
+        const content = `Two-Factor Authentication Backup Codes
+Account: {{ current_user.username }} ({{ current_user.email }})
+Generated: ${new Date().toLocaleString()}
+
+Backup Codes:
+${codes.map((code, index) => `${index + 1}. ${code}`).join('\n')}
+
+Important:
+- Store these codes in a secure location
+- Each code can only be used once
+- Don't share these codes with anyone
+`;
+        
+        const blob = new Blob([content], { type: 'text/plain' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = '2fa-backup-codes.txt';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+    }
+</script>
+{% endblock %}

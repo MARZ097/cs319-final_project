@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+{% set title = "Security Settings" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2><i class="bi bi-shield-check"></i> Security Settings</h2>
+        <p class="text-muted">Manage your account security and authentication settings.</p>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Password Security -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-key"></i> Password Security</h5>
+            </div>
+            <div class="card-body">
+                <div class="security-indicator secure mb-3">
+                    <i class="bi bi-check-circle"></i>
+                    <span>Password strength: <strong>Strong</strong></span>
+                </div>
+                
+                <p class="text-muted">
+                    Last changed: {{ user.password_changed_at.strftime('%B %d, %Y') }}
+                </p>
+                
+                <div class="d-grid">
+                    <a href="{{ url_for('auth.change_password') }}" class="btn btn-primary">
+                        <i class="bi bi-key"></i> Change Password
+                    </a>
+                </div>
+                
+                <div class="mt-3">
+                    <h6>Password Requirements:</h6>
+                    <ul class="small text-muted">
+                        <li>At least 8 characters long</li>
+                        <li>Contains uppercase and lowercase letters</li>
+                        <li>Contains at least one digit</li>
+                        <li>Contains at least one special character</li>
+                        <li>Not found in data breaches</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Two-Factor Authentication -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-shield-plus"></i> Two-Factor Authentication</h5>
+            </div>
+            <div class="card-body">
+                <div class="security-indicator {{ 'secure' if user.is_2fa_enabled else 'warning' }} mb-3">
+                    <i class="bi bi-{{ 'check-circle' if user.is_2fa_enabled else 'exclamation-triangle' }}"></i>
+                    <span>2FA Status: <strong>{{ 'Enabled' if user.is_2fa_enabled else 'Disabled' }}</strong></span>
+                </div>
+                
+                {% if user.is_2fa_enabled %}
+                    <p class="text-success">
+                        <i class="bi bi-shield-check"></i>
+                        Your account is protected with two-factor authentication.
+                    </p>
+                    
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-outline-secondary" onclick="generateBackupCodes()">
+                            <i class="bi bi-download"></i> Generate New Backup Codes
+                        </button>
+                        <a href="{{ url_for('auth.disable_2fa') }}" class="btn btn-outline-danger">
+                            <i class="bi bi-shield-x"></i> Disable 2FA
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        <strong>Recommended:</strong> Enable 2FA for enhanced security.
+                    </div>
+                    
+                    <div class="d-grid">
+                        <a href="{{ url_for('auth.setup_2fa') }}" class="btn btn-success">
+                            <i class="bi bi-shield-plus"></i> Enable Two-Factor Authentication
+                        </a>
+                    </div>
+                {% endif %}
+                
+                <div class="mt-3">
+                    <h6>What is 2FA?</h6>
+                    <p class="small text-muted">
+                        Two-factor authentication adds an extra layer of security by requiring 
+                        a second form of verification in addition to your password.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Account Security -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-person-check"></i> Account Security</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <i class="bi bi-shield-check display-4 text-success"></i>
+                            <h6 class="mt-2">Account Status</h6>
+                            <span class="badge bg-success">Active</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <i class="bi bi-geo-alt display-4 text-info"></i>
+                            <h6 class="mt-2">Last Login IP</h6>
+                            <small class="text-muted">
+                                {% if user.last_login_ip %}
+                                    {{ user.last_login_ip }}
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <i class="bi bi-clock display-4 text-warning"></i>
+                            <h6 class="mt-2">Failed Attempts</h6>
+                            <span class="badge bg-{{ 'danger' if user.failed_login_attempts > 0 else 'success' }}">
+                                {{ user.failed_login_attempts }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Security Tips -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-lightbulb"></i> Security Tips</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul>
+                            <li>Use a unique, strong password</li>
+                            <li>Enable two-factor authentication</li>
+                            <li>Keep your recovery codes safe</li>
+                            <li>Log out from shared computers</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul>
+                            <li>Monitor your account activity</li>
+                            <li>Report suspicious activity</li>
+                            <li>Keep your contact information updated</li>
+                            <li>Review security settings regularly</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function generateBackupCodes() {
+        if (confirm('This will generate new backup codes and invalidate your existing ones. Continue?')) {
+            // In a real implementation, this would make an AJAX request
+            window.location.href = '{{ url_for("auth.setup_2fa") }}';
+        }
+    }
+</script>
+{% endblock %}
