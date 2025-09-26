@@ -18,7 +18,12 @@ def create_app():
     
     # Configure app
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-key-for-testing-only')
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI', 'sqlite:///app.db')
+    
+    # Set an explicit database path
+    db_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), '..', 'instance', 'app.db')
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
+    print(f"Database URI set to: {app.config['SQLALCHEMY_DATABASE_URI']}")
+    
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['PERMANENT_SESSION_LIFETIME'] = int(os.getenv('SESSION_TIMEOUT', 1800))  # Default 30 minutes
     
@@ -61,11 +66,14 @@ def create_app():
     
     # Create database tables
     with app.app_context():
+        print("Creating database tables...")
         db.create_all()
+        print("Database tables created.")
         
         # Create initial admin user if no users exist
         from app.models import User, Role
         if User.query.count() == 0:
+            print("No users found. Creating initial admin user...")
             # Create roles if they don't exist
             admin_role = Role.query.filter_by(name='admin').first()
             if not admin_role:
@@ -88,5 +96,6 @@ def create_app():
             )
             db.session.add(admin)
             db.session.commit()
+            print("Admin user created successfully")
     
     return app

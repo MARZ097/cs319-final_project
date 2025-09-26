@@ -53,13 +53,11 @@ The Access Control System is a secure web application for managing user authenti
    cp env.example .env
    ```
 
-6. Edit the `.env` file to set a secure secret key and other configuration options.
+6. Edit the `.env` file to set a secure secret key (you can generate one using `python -c "import secrets; print(secrets.token_hex(24))"`) and other configuration options.
 
 7. Initialize the database:
    ```bash
-   flask db init
-   flask db migrate -m "Initial migration"
-   flask db upgrade
+   python setup_db.py
    ```
 
 8. Run the application:

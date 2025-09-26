@@ -123,6 +123,7 @@ The database schema includes the following main tables:
 - Database: flask-sqlalchemy, sqlalchemy
 - Security: bcrypt, werkzeug.security
 - Configuration: python-dotenv
+- (Note: Flask-Migrate was removed due to compatibility issues)
 
 ## Error Handling
 - Custom error handlers for common HTTP errors (404, 403, 500)

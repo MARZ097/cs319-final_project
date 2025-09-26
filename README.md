@@ -28,7 +28,7 @@ A secure access control system for small organizations, implemented using Flask.
    - Linux/Mac: `source venv/bin/activate`
 4. Install dependencies: `pip install -r requirements.txt`
 5. Copy `env.example` to `.env` and update with your settings
-6. Initialize the database: `flask db init && flask db migrate && flask db upgrade`
+6. Initialize the database: `python setup_db.py`
 7. Run the application: `flask run`
 
 ## Project Structure
@@ -43,7 +43,7 @@ project/
   app/security/utils.py
   app/templates/... (Jinja2)
   app/static/
-  migrations/
+  instance/        # Contains SQLite database
   tests/
 ```
 
