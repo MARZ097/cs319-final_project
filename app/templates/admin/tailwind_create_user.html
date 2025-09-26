@@ -1,0 +1,183 @@
+{% extends "tailwind_base.html" %}
+
+{% block title %}Create User - Access Control System{% endblock %}
+
+{% block header %}
+<div class="mb-6">
+    <h1 class="text-2xl font-bold text-gray-900">Create New User</h1>
+    <p class="mt-1 text-sm text-gray-500">Add a new user to the system</p>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl">
+    <div class="card">
+        <form method="POST" action="{{ url_for('admin.create_user') }}" x-data="{ password: '', passwordStrength: 'None' }">
+            {{ form.hidden_tag() }}
+            
+            <div class="space-y-8">
+                <div>
+                    <h3 class="text-base font-semibold leading-6 text-gray-900">User Information</h3>
+                    <p class="mt-1 text-sm text-gray-500">Basic user account information.</p>
+                    
+                    <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                        <div class="sm:col-span-3">
+                            <label for="username" class="block text-sm font-medium leading-6 text-gray-900">Username</label>
+                            <div class="mt-2">
+                                {{ form.username(class="form-input", id="username") }}
+                                {% for error in form.username.errors %}
+                                    <p class="error-message">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <div class="sm:col-span-3">
+                            <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email</label>
+                            <div class="mt-2">
+                                {{ form.email(class="form-input", id="email") }}
+                                {% for error in form.email.errors %}
+                                    <p class="error-message">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <div class="sm:col-span-3">
+                            <label for="first_name" class="block text-sm font-medium leading-6 text-gray-900">First name</label>
+                            <div class="mt-2">
+                                {{ form.first_name(class="form-input", id="first_name") }}
+                                {% for error in form.first_name.errors %}
+                                    <p class="error-message">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <div class="sm:col-span-3">
+                            <label for="last_name" class="block text-sm font-medium leading-6 text-gray-900">Last name</label>
+                            <div class="mt-2">
+                                {{ form.last_name(class="form-input", id="last_name") }}
+                                {% for error in form.last_name.errors %}
+                                    <p class="error-message">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pb-6 border-b border-gray-900/10">
+                    <h3 class="text-base font-semibold leading-6 text-gray-900">Account Settings</h3>
+                    <p class="mt-1 text-sm text-gray-500">Set the user role and account status.</p>
+                    
+                    <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                        <div class="sm:col-span-3">
+                            <label for="role" class="block text-sm font-medium leading-6 text-gray-900">Role</label>
+                            <div class="mt-2">
+                                {{ form.role(class="form-input", id="role") }}
+                                {% for error in form.role.errors %}
+                                    <p class="error-message">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <div class="sm:col-span-3 flex items-center h-full pt-6">
+                            <div class="relative flex items-start">
+                                <div class="flex h-6 items-center">
+                                    {{ form.is_active(class="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-600", id="is_active") }}
+                                </div>
+                                <div class="ml-3 text-sm leading-6">
+                                    <label for="is_active" class="font-medium text-gray-900">Active</label>
+                                    <p class="text-gray-500">User can log in and use the system</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-base font-semibold leading-6 text-gray-900">Password</h3>
+                    <p class="mt-1 text-sm text-gray-500">Set the user's initial password.</p>
+                    
+                    <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                        <div class="sm:col-span-3" x-data="{ showPassword: false }">
+                            <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
+                            <div class="mt-2 relative">
+                                <div class="relative rounded-md shadow-sm">
+                                    {{ form.password(class="form-input pr-10", id="password", 
+                                                    x_model="password", 
+                                                    x_on_input="passwordStrength = evaluatePasswordStrength(password)",
+                                                    x_bind_type="showPassword ? 'text' : 'password'") }}
+                                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer" @click="showPassword = !showPassword">
+                                        <!-- Eye icon (open) -->
+                                        <svg x-show="!showPassword" class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        </svg>
+                                        <!-- Eye icon (closed) -->
+                                        <svg x-show="showPassword" class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                {% for error in form.password.errors %}
+                                    <p class="error-message">{{ error }}</p>
+                                {% endfor %}
+                                
+                                <div class="mt-2 flex items-center" x-show="password.length > 0">
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="h-2 rounded-full" 
+                                             :class="{
+                                                'bg-red-500': passwordStrength === 'Very Weak' || passwordStrength === 'Weak',
+                                                'bg-yellow-500': passwordStrength === 'Medium',
+                                                'bg-green-500': passwordStrength === 'Strong' || passwordStrength === 'Very Strong'
+                                             }"
+                                             :style="{ width: getPasswordStrengthWidth(passwordStrength) }"></div>
+                                    </div>
+                                    <span class="ml-2 text-xs text-gray-500" x-text="passwordStrength"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="sm:col-span-3" x-data="{ showConfirmPassword: false }">
+                            <label for="confirm_password" class="block text-sm font-medium leading-6 text-gray-900">Confirm Password</label>
+                            <div class="mt-2 relative">
+                                <div class="relative rounded-md shadow-sm">
+                                    {{ form.confirm_password(class="form-input pr-10", id="confirm_password", x_bind_type="showConfirmPassword ? 'text' : 'password'") }}
+                                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer" @click="showConfirmPassword = !showConfirmPassword">
+                                        <!-- Eye icon (open) -->
+                                        <svg x-show="!showConfirmPassword" class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        </svg>
+                                        <!-- Eye icon (closed) -->
+                                        <svg x-show="showConfirmPassword" class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                {% for error in form.confirm_password.errors %}
+                                    <p class="error-message">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-2">
+                        <p class="text-sm text-gray-500">Password must contain:</p>
+                        <ul class="pl-5 mt-1 text-sm text-gray-500 list-disc">
+                            <li>At least 8 characters</li>
+                            <li>At least one uppercase letter</li>
+                            <li>At least one lowercase letter</li>
+                            <li>At least one number</li>
+                            <li>At least one special character (!@#$%^&*(),.?":{}|&lt;&gt;)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-8 flex justify-end space-x-3">
+                <a href="{{ url_for('admin.list_users') }}" class="btn-secondary">Cancel</a>
+                {{ form.submit(class="btn", value="Create User") }}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
