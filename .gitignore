@@ -1,12 +1,10 @@
-# Environment variables
-.env
-
 # Python
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
+env/
 build/
 develop-eggs/
 dist/
@@ -18,42 +16,35 @@ lib64/
 parts/
 sdist/
 var/
-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
 
-# Virtual environment
+# Virtual Environment
 venv/
-env/
 ENV/
+env/
+
+# Environment variables
+.env
 
 # Database
 *.db
-*.sqlite
 *.sqlite3
-migrations/
 
-# IDE
-.vscode/
+# Log files
+*.log
+
+# IDE files
 .idea/
+.vscode/
 *.swp
 *.swo
 
-# OS
+# OS specific files
 .DS_Store
 Thumbs.db
 
-# Logs
-*.log
-logs/
-
 # Uploads
-app/static/uploads/*
-!app/static/uploads/.gitkeep
-
-# Testing
-.coverage
-htmlcov/
-.pytest_cache/
-
+app/static/profile_pics/*
+!app/static/profile_pics/default.png

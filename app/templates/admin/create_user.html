@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Create User - Access Control System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Create New User</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('admin.create_user') }}">
+                    {{ form.hidden_tag() }}
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form.username.label(class="form-label") }}
+                            {{ form.username(class="form-control") }}
+                            {% for error in form.username.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.email.label(class="form-label") }}
+                            {{ form.email(class="form-control") }}
+                            {% for error in form.email.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form.first_name.label(class="form-label") }}
+                            {{ form.first_name(class="form-control") }}
+                            {% for error in form.first_name.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.last_name.label(class="form-label") }}
+                            {{ form.last_name(class="form-control") }}
+                            {% for error in form.last_name.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form.password.label(class="form-label") }}
+                            {{ form.password(class="form-control") }}
+                            {% for error in form.password.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.confirm_password.label(class="form-label") }}
+                            {{ form.confirm_password(class="form-control") }}
+                            {% for error in form.confirm_password.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form.role.label(class="form-label") }}
+                            {{ form.role(class="form-select") }}
+                            {% for error in form.role.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-check mt-4">
+                                {{ form.is_active(class="form-check-input") }}
+                                {{ form.is_active.label(class="form-check-label") }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2">
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer">
+                <div class="small text-muted">
+                    <p><strong>Password requirements:</strong></p>
+                    <ul>
+                        <li>At least 8 characters long</li>
+                        <li>Contains at least one uppercase letter</li>
+                        <li>Contains at least one lowercase letter</li>
+                        <li>Contains at least one digit</li>
+                        <li>Contains at least one special character (!@#$%^&*(),.?":{|})</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
