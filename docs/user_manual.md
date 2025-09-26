@@ -18,6 +18,8 @@ The Access Control System is a secure web application for managing user authenti
 ### Prerequisites
 - Python 3.8 or higher
 - pip (Python package installer)
+- Node.js 16.0 or higher (for Tailwind CSS)
+- npm (Node.js package manager)
 - Git (optional)
 
 ### Setup Steps
@@ -43,29 +45,36 @@ The Access Control System is a secure web application for managing user authenti
      source venv/bin/activate
      ```
 
-4. Install dependencies:
+4. Install Python dependencies:
    ```bash
    pip install -r requirements.txt
    ```
+   
+5. Install Node.js dependencies:
+   ```bash
+   npm install
+   ```
 
-5. Create a `.env` file based on the `env.example` template:
+6. Create a `.env` file based on the `env.example` template:
    ```bash
    cp env.example .env
    ```
 
-6. Edit the `.env` file to set a secure secret key (you can generate one using `python -c "import secrets; print(secrets.token_hex(24))"`) and other configuration options.
+7. Edit the `.env` file to set a secure secret key (you can generate one using `python -c "import secrets; print(secrets.token_hex(24))"`) and other configuration options.
 
-7. Initialize the database:
+8. Initialize the database:
    ```bash
    python setup_db.py
    ```
 
-8. Run the application:
+9. Run the application:
    ```bash
-   flask run
+   python run.py
    ```
+   
+   This will automatically build the Tailwind CSS and start the application.
 
-9. Access the application at http://127.0.0.1:5000
+10. Access the application at http://127.0.0.1:5000
 
 ## Getting Started
 

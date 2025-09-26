@@ -43,8 +43,9 @@ This document describes the architecture of the Access Control System, a Flask-b
 
 ### Client Layer
 - **Web Browser**: Users interact with the system through a standard web browser using HTML, CSS, and JavaScript.
-- **Bootstrap 5**: Frontend framework for responsive design and UI components.
-- **Custom JavaScript**: Client-side validation, password strength meter, session timeout handling.
+- **Tailwind CSS**: Modern utility-first CSS framework for responsive design and UI components.
+- **Alpine.js**: Lightweight JavaScript framework for reactive UI components.
+- **Custom JavaScript**: Client-side validation, password strength meter, session timeout handling, table sorting.
 
 ### Application Layer
 - **Flask Framework**: Python web framework that provides the foundation for the application.
@@ -117,6 +118,7 @@ The database schema includes the following main tables:
 - `password_reset_tokens`: Tokens for secure password reset
 
 ## Module Dependencies
+### Backend Dependencies
 - Flask core dependencies
 - Authentication: flask-login
 - Forms and validation: flask-wtf, email-validator
@@ -124,6 +126,12 @@ The database schema includes the following main tables:
 - Security: bcrypt, werkzeug.security
 - Configuration: python-dotenv
 - (Note: Flask-Migrate was removed due to compatibility issues)
+
+### Frontend Dependencies
+- Tailwind CSS: Modern utility-first CSS framework
+- PostCSS: CSS transformations and processing
+- Alpine.js: Lightweight JavaScript framework for reactivity
+- Heroicons: SVG icon set
 
 ## Error Handling
 - Custom error handlers for common HTTP errors (404, 403, 500)
