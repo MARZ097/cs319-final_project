@@ -14,7 +14,7 @@ admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 @admin_required
 def admin_dashboard():
     users = User.query.all()
-    return render_template('admin/dashboard.html', users=users)
+    return render_template('admin/tailwind_dashboard.html', users=users)
 
 
 @admin_bp.route('/users')
@@ -22,7 +22,7 @@ def admin_dashboard():
 @admin_required
 def list_users():
     users = User.query.all()
-    return render_template('admin/users.html', users=users)
+    return render_template('admin/tailwind_users.html', users=users)
 
 
 @admin_bp.route('/users/create', methods=['GET', 'POST'])
@@ -40,12 +40,12 @@ def create_user():
         existing_user = User.query.filter_by(username=form.username.data).first()
         if existing_user:
             flash('Username already exists', 'danger')
-            return render_template('admin/create_user.html', form=form)
+            return render_template('admin/tailwind_create_user.html', form=form)
         
         existing_email = User.query.filter_by(email=form.email.data).first()
         if existing_email:
             flash('Email already exists', 'danger')
-            return render_template('admin/create_user.html', form=form)
+            return render_template('admin/tailwind_create_user.html', form=form)
         
         # Create new user
         user = User(
@@ -84,7 +84,7 @@ def create_user():
         flash(f'User {user.username} has been created', 'success')
         return redirect(url_for('admin.list_users'))
     
-    return render_template('admin/create_user.html', form=form)
+    return render_template('admin/tailwind_create_user.html', form=form)
 
 
 @admin_bp.route('/users/edit/<int:user_id>', methods=['GET', 'POST'])
@@ -137,7 +137,7 @@ def edit_user(user_id):
     if user.role:
         form.role.data = user.role.id
     
-    return render_template('admin/edit_user.html', form=form, user=user)
+    return render_template('admin/tailwind_edit_user.html', form=form, user=user)
 
 
 @admin_bp.route('/users/delete/<int:user_id>', methods=['POST'])
@@ -222,4 +222,4 @@ def audit_logs():
     actions = db.session.query(AuditLog.action).distinct().all()
     actions = [action[0] for action in actions]
     
-    return render_template('admin/audit_logs.html', logs=logs, users=users, actions=actions)
+    return render_template('admin/tailwind_audit_logs.html', logs=logs, users=users, actions=actions)

@@ -27,13 +27,17 @@ env/
 
 # Environment variables
 .env
+.env.*
+!.env.example
 
 # Database
 *.db
 *.sqlite3
+instance/
 
 # Log files
 *.log
+setup_output.log
 
 # IDE files
 .idea/
@@ -48,3 +52,21 @@ Thumbs.db
 # Uploads
 app/static/profile_pics/*
 !app/static/profile_pics/default.png
+
+# Node.js / Tailwind CSS
+node_modules/
+package-lock.json
+app/static/css/tailwind.css
+.cache/
+.parcel-cache/
+
+# Generated files
+__pycache__/
+*.pyc
+.pytest_cache/
+migrations/versions/
+
+# Temporary files
+tmp/
+temp/
+*.tmp

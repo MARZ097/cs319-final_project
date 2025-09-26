@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply h-full bg-gray-50;
+  }
+  body {
+    @apply h-full;
+  }
+  h1 {
+    @apply text-2xl font-bold text-gray-900;
+  }
+  h2 {
+    @apply text-xl font-semibold text-gray-900;
+  }
+  h3 {
+    @apply text-lg font-medium text-gray-900;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex justify-center rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  
+  .btn-secondary {
+    @apply inline-flex justify-center rounded-md bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+  
+  .form-input {
+    @apply block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm;
+  }
+  
+  .error-message {
+    @apply mt-2 text-sm text-red-600;
+  }
+  
+  .success-message {
+    @apply mt-2 text-sm text-green-600;
+  }
+  
+  .alert-danger {
+    @apply p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50;
+  }
+  
+  .alert-success {
+    @apply p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50;
+  }
+  
+  .alert-info {
+    @apply p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50;
+  }
+  
+  .alert-warning {
+    @apply p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50;
+  }
+  
+  .card {
+    @apply bg-white shadow-sm rounded-lg border border-gray-200 p-6;
+  }
+  
+  .card-header {
+    @apply pb-4 border-b border-gray-200 mb-4;
+  }
+  
+  .card-title {
+    @apply text-lg font-medium text-gray-900;
+  }
+  
+  .table-container {
+    @apply mt-4 flow-root overflow-x-auto;
+  }
+  
+  .table {
+    @apply min-w-full divide-y divide-gray-300;
+  }
+  
+  .table-header {
+    @apply bg-gray-50;
+  }
+  
+  .table-header-cell {
+    @apply px-3 py-3.5 text-left text-sm font-semibold text-gray-900;
+  }
+  
+  .table-body {
+    @apply divide-y divide-gray-200 bg-white;
+  }
+  
+  .table-row {
+    @apply hover:bg-gray-50;
+  }
+  
+  .table-cell {
+    @apply whitespace-nowrap px-3 py-4 text-sm text-gray-500;
+  }
+  
+  .badge {
+    @apply inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset;
+  }
+  
+  .badge-success {
+    @apply bg-green-50 text-green-700 ring-green-600/20;
+  }
+  
+  .badge-danger {
+    @apply bg-red-50 text-red-700 ring-red-600/20;
+  }
+}

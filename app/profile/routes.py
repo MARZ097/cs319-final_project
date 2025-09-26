@@ -12,13 +12,19 @@ from app.security.utils import log_authentication, get_client_ip, validate_passw
 
 profile_bp = Blueprint('profile', __name__, url_prefix='/profile')
 
+# Redirect old Tailwind route to main dashboard
+@profile_bp.route('/tailwind/dashboard')
+@login_required
+def tailwind_dashboard():
+    return redirect(url_for('profile.dashboard'))
+
 @profile_bp.route('/dashboard')
 @login_required
 def dashboard():
     # Get recent audit logs for the current user
     logs = AuditLog.query.filter_by(user_id=current_user.id).order_by(AuditLog.timestamp.desc()).limit(10).all()
     
-    return render_template('profile/dashboard.html', logs=logs)
+    return render_template('profile/tailwind_dashboard.html', logs=logs)
 
 
 @profile_bp.route('/edit', methods=['GET', 'POST'])
@@ -65,7 +71,7 @@ def edit_profile():
         flash('Your profile has been updated', 'success')
         return redirect(url_for('profile.dashboard'))
     
-    return render_template('profile/edit_profile.html', form=form)
+    return render_template('profile/tailwind_edit_profile.html', form=form)
 
 
 @profile_bp.route('/change-password', methods=['GET', 'POST'])
@@ -77,23 +83,23 @@ def change_password():
         # Check current password
         if not current_user.verify_password(form.current_password.data):
             flash('Current password is incorrect', 'danger')
-            return render_template('profile/change_password.html', form=form)
+            return render_template('profile/tailwind_change_password.html', form=form)
         
         # Validate new password
         is_valid, message = validate_password(form.new_password.data)
         if not is_valid:
             flash(message, 'danger')
-            return render_template('profile/change_password.html', form=form)
+            return render_template('profile/tailwind_change_password.html', form=form)
         
         # Check if the new password is the same as the old one
         if current_user.verify_password(form.new_password.data):
             flash('New password must be different from the current password', 'danger')
-            return render_template('profile/change_password.html', form=form)
+            return render_template('profile/tailwind_change_password.html', form=form)
         
         # Check if the new password was used before
         if current_user.check_password_reuse(form.new_password.data):
             flash('This password was used before. Please choose a different one', 'danger')
-            return render_template('profile/change_password.html', form=form)
+            return render_template('profile/tailwind_change_password.html', form=form)
         
         # Update password
         current_user.password = form.new_password.data
@@ -111,4 +117,4 @@ def change_password():
         flash('Your password has been updated', 'success')
         return redirect(url_for('profile.dashboard'))
     
-    return render_template('profile/change_password.html', form=form)
+    return render_template('profile/tailwind_change_password.html', form=form)

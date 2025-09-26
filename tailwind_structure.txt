@@ -1,0 +1,31 @@
+Tailwind CSS UI Structure
+
+├── app/
+│   ├── static/
+│   │   ├── css/
+│   │   │   └── tailwind.css         # Compiled CSS (generated)
+│   │   ├── src/
+│   │   │   └── input.css           # Tailwind source CSS
+│   │   └── js/
+│   │       └── main.js             # JavaScript functions
+│   └── templates/
+│       ├── tailwind_base.html      # Base template with modern layout
+│       ├── auth/
+│       │   ├── tailwind_login.html             # Modern login page
+│       │   └── tailwind_reset_password.html     # Modern password reset page
+│       ├── profile/
+│       │   ├── tailwind_dashboard.html         # Modern user dashboard
+│       │   ├── tailwind_edit_profile.html      # Modern profile editing page
+│       │   └── tailwind_change_password.html   # Modern password change page
+│       └── admin/
+│           ├── tailwind_dashboard.html         # Modern admin dashboard
+│           ├── tailwind_users.html             # Modern user management page
+│           ├── tailwind_create_user.html       # Modern user creation form
+│           ├── tailwind_edit_user.html         # Modern user editing form
+│           └── tailwind_audit_logs.html        # Modern audit logs viewer
+├── package.json                   # npm package definition
+├── tailwind.config.js             # Tailwind configuration
+├── postcss.config.js              # PostCSS configuration
+├── TAILWIND_README.md             # Documentation for Tailwind setup
+├── start_tailwind.bat             # Windows script to build and run
+└── run_tailwind.py                # Python script to build and run

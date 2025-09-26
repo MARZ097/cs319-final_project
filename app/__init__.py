@@ -62,7 +62,7 @@ def create_app():
     
     @app.route('/')
     def index():
-        return redirect(url_for('auth.login'))
+        return redirect(url_for('auth.tailwind_login'))
     
     # Create database tables
     with app.app_context():

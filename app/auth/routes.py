@@ -11,10 +11,15 @@ from app.security.utils import log_authentication, get_client_ip, validate_passw
 
 auth_bp = Blueprint('auth', __name__)
 
+# Redirect old Tailwind UI route to main login
+@auth_bp.route('/tailwind/login')
+def tailwind_login():
+    return redirect(url_for('auth.login'))
+
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('profile.dashboard'))
+        return redirect(url_for('profile.tailwind_dashboard'))
     
     form = LoginForm()
     
@@ -27,12 +32,12 @@ def login():
         if user is None:
             log_authentication(False, form.username.data, ip_address)
             flash('Invalid username or password', 'danger')
-            return render_template('auth/login.html', form=form)
+            return render_template('auth/tailwind_login.html', form=form)
         
         if not user.is_active:
             log_authentication(False, user.username, ip_address)
             flash('This account has been deactivated', 'danger')
-            return render_template('auth/login.html', form=form)
+            return render_template('auth/tailwind_login.html', form=form)
         
         # Check if account is locked
         if user.is_locked():
@@ -40,7 +45,7 @@ def login():
             remaining_time = user.locked_until - datetime.utcnow()
             minutes = remaining_time.seconds // 60
             flash(f'Account is locked. Please try again in {minutes} minutes', 'danger')
-            return render_template('auth/login.html', form=form)
+            return render_template('auth/tailwind_login.html', form=form)
         
         if user.verify_password(form.password.data):
             # Reset login attempts on successful login
@@ -69,7 +74,7 @@ def login():
             next_page = request.args.get('next')
             if next_page:
                 return redirect(next_page)
-            return redirect(url_for('profile.dashboard'))
+            return redirect(url_for('profile.tailwind_dashboard'))
         else:
             # Increment login attempts
             user.increment_login_attempts()
@@ -83,7 +88,7 @@ def login():
                 
             log_authentication(False, user.username, ip_address)
             
-    return render_template('auth/login.html', form=form)
+    return render_template('auth/tailwind_login.html', form=form)
 
 
 @auth_bp.route('/logout')
@@ -143,7 +148,7 @@ def reset_password_request():
         flash('If that email address exists in our database, a password reset link has been sent', 'info')
         return redirect(url_for('auth.login'))
         
-    return render_template('auth/reset_password_request.html', form=form)
+    return render_template('auth/tailwind_reset_password_request.html', form=form)
 
 
 @auth_bp.route('/reset-password/<token>', methods=['GET', 'POST'])
@@ -172,17 +177,17 @@ def reset_password(token):
         
         if not is_valid:
             flash(message, 'danger')
-            return render_template('auth/reset_password.html', form=form, token=token)
+            return render_template('auth/tailwind_reset_password.html', form=form, token=token)
         
         # Check if the new password is the same as the old one
         if user.verify_password(form.password.data):
             flash('New password must be different from the old password', 'danger')
-            return render_template('auth/reset_password.html', form=form, token=token)
+            return render_template('auth/tailwind_reset_password.html', form=form, token=token)
         
         # Check if the new password was used before
         if user.check_password_reuse(form.password.data):
             flash('This password was used before. Please choose a different one', 'danger')
-            return render_template('auth/reset_password.html', form=form, token=token)
+            return render_template('auth/tailwind_reset_password.html', form=form, token=token)
         
         # Update password
         user.password = form.password.data
@@ -202,4 +207,4 @@ def reset_password(token):
         flash('Your password has been reset successfully', 'success')
         return redirect(url_for('auth.login'))
         
-    return render_template('auth/reset_password.html', form=form, token=token)
+    return render_template('auth/tailwind_reset_password.html', form=form, token=token)
